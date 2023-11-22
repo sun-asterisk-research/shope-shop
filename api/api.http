@@ -1,0 +1,104 @@
+@host = http://localhost:3000
+@contentType = application/json
+@accessToken = {{login.response.body.$.accessToken}}
+
+################################
+# @name login
+
+POST {{host}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "{{$dotenv USERNAME}}",
+  "password": "{{$dotenv PASSWORD}}"
+}
+
+################################
+# @name getProfile
+
+GET {{host}}/auth/user HTTP/1.1
+Content-Type: {{contentType}}
+Cookie: shope_auth={{accessToken}}
+Authorization: Bearer {{accessToken}}
+
+################################
+# @name register
+
+POST {{host}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "customer{{$randomInt 1 9999}}",
+  "password": "12345678",
+  "confirmPassword": "12345678"
+}
+
+################################
+# @name latestProducts
+# @prompt keyword Search
+# @prompt cursor
+
+GET {{host}}/products/latest
+  ?q={{keyword}}
+  &limit=12
+  &cursor={{cursor}}
+
+################################
+# @name getProduct
+
+GET {{host}}/products/{{latestProducts.response.body.data.0._id}}
+
+################################
+# @name resetCart
+
+DELETE {{host}}/cart
+Authorization: Bearer {{accessToken}}
+
+################################
+# @name viewCart
+
+GET {{host}}/cart
+Authorization: Bearer {{accessToken}}
+
+################################
+# @name addToCart
+
+POST {{host}}/cart/item
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "productId": "{{latestProducts.response.body.data.0._id}}"
+}
+
+################################
+# @name removeFromCart
+
+DELETE {{host}}/cart/item
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "productId": "{{latestProducts.response.body.data.0._id}}"
+}
+
+################################
+# @name getCheckout
+GET {{host}}/cart/checkout
+Authorization: Bearer {{accessToken}}
+
+################################
+# @name postCheckout
+POST {{host}}/cart/checkout
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "address": "{{$dotenv ADDRESS}}"
+}
+
+################################
+# @name getOrders
+# @prompt cursor
+GET {{host}}/orders?cursor={{cursor}}
+Authorization: Bearer {{accessToken}}

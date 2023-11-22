@@ -1,0 +1,74 @@
+version: v2beta1
+name: api
+
+pipelines:
+  dev:
+    run: |-
+      run_dependencies --all
+      ensure_pull_secrets --all
+      create_deployments --all
+      start_dev api
+  deploy:
+    run: |-
+      run_dependencies --all
+      ensure_pull_secrets --all
+      build_images --all -t $(git describe --always)
+      create_deployments --all
+
+images:
+  api:
+    image: ghcr.io/sun-asterisk-research/shope-shop/api
+
+deployments:
+  api:
+    helm:
+      chart:
+        name: component-chart
+        repo: https://charts.devspace.sh
+      values:
+        containers:
+          - image: ghcr.io/sun-asterisk-research/shope-shop/api
+            env:
+              - name: DATABASE_URL
+                value: mongodb://shope:secret@mongodb:27017/shope
+              - name: JWT_SECRET
+                value: secret
+        service:
+          ports:
+            - port: 3000
+
+  mongodb:
+    helm:
+      chart:
+        name: mongodb
+        repo: https://charts.bitnami.com/bitnami
+      values:
+        # https://artifacthub.io/packages/helm/bitnami/mongodb
+        architecture: "standalone"
+        image:
+          repository: bitnami/mongodb
+          tag: "7.0.2-debian-11-r0"
+        auth:
+          databases: ["shope"]
+          usernames: ["shope"]
+          passwords: ["secret"]
+
+dev:
+  api:
+    labelSelector:
+      app.kubernetes.io/component: api
+    devImage: oven/bun:1
+    command: ["./devspace_start.sh"]
+    env:
+      - name: NODE_ENV
+        value: development
+    workingDir: /api
+    sync:
+      - path: ./
+        uploadExcludePaths:
+          - node_modules
+        startContainer: true
+    persistPaths:
+      - path: /api/node_modules
+    ports:
+      - port: "3000"

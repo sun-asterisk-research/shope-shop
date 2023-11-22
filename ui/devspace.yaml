@@ -1,0 +1,53 @@
+version: v2beta1
+name: api
+
+pipelines:
+  dev:
+    run: |-
+      run_dependencies --all
+      ensure_pull_secrets --all
+      create_deployments --all
+      start_dev ui
+  deploy:
+    run: |-
+      run_dependencies --all
+      ensure_pull_secrets --all
+      build_images --all -t $(git describe --always)
+      create_deployments --all
+
+images:
+  ui:
+    image: ghcr.io/sun-asterisk-research/shope-shop/ui
+    buildArgs:
+      PUBLIC_API_URL: "http://localhost:3000"
+      PUBLIC_USERNAME_DEFAULT: "customer1935"
+
+deployments:
+  ui:
+    helm:
+      chart:
+        name: component-chart
+        repo: https://charts.devspace.sh
+      values:
+        containers:
+          - image: ghcr.io/sun-asterisk-research/shope-shop/ui
+        service:
+          ports:
+            - port: 5173
+
+dev:
+  ui:
+    labelSelector:
+      app.kubernetes.io/component: ui
+    devImage: node:20
+    command: ["./devspace_start.sh"]
+    workingDir: /ui
+    sync:
+      - path: ./
+        uploadExcludePaths:
+          - node_modules
+        startContainer: true
+    persistPaths:
+      - path: /ui/node_modules
+    ports:
+      - port: "5173"

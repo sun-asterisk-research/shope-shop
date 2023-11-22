@@ -1,0 +1,18 @@
+version: v2beta1
+name: shop
+
+dependencies:
+  api:
+    path: ./api
+  ui:
+    path: ./ui
+
+profiles:
+  - name: dev
+    patches:
+      - op: replace
+        path: dependencies.api.pipeline
+        value: dev
+      - op: replace
+        path: dependencies.ui.pipeline
+        value: dev
