@@ -63,3 +63,13 @@ The production build will generate client and server modules by running both cli
 ```shell
 bun build # or `yarn build`
 ```
+
+## Fastify Server
+
+This app has a minimal [Fastify server](https://fastify.dev/) implementation. After running a full build, you can preview the build using the command:
+
+```
+yarn serve
+```
+
+Then visit [http://localhost:3000/](http://localhost:3000/)

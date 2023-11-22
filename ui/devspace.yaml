@@ -33,7 +33,7 @@ deployments:
           - image: ghcr.io/sun-asterisk-research/shope-shop/ui
         service:
           ports:
-            - port: 5173
+            - port: 3000
 
 dev:
   ui:
@@ -70,4 +70,4 @@ profiles:
                       service:
                         name: ui
                         port:
-                          number: 5173
+                          number: 3000
