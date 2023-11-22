@@ -72,3 +72,23 @@ dev:
       - path: /api/node_modules
     ports:
       - port: "3000"
+
+profiles:
+  - name: production
+    patches:
+      - op: replace
+        path: deployments.api.helm.values.ingress
+        value:
+          name: shope-api
+          ingressClass: nginx
+          rules:
+            - host: shopeapi.sun-asterisk.ai
+              http:
+                paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                      service:
+                        name: api
+                        port:
+                          number: 3000

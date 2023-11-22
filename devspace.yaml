@@ -16,3 +16,13 @@ profiles:
       - op: replace
         path: dependencies.ui.pipeline
         value: dev
+  - name: production
+    patches:
+      - op: replace
+        path: dependencies.ui.profiles
+        value:
+          - production
+      - op: replace
+        path: dependencies.api.profiles
+        value:
+          - production
