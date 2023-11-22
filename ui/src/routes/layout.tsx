@@ -1,5 +1,5 @@
 import { component$, Slot, useContextProvider } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import HeaderSection from "~/components/header-section/header-section";
 import type { AuthData } from "~/contexts/auth";
@@ -46,14 +46,22 @@ export const useAuthData = routeLoader$<AuthData>(async (e) => {
 });
 
 export default component$(() => {
+  const location = useLocation();
   const auth = useAuthData();
+
   useContextProvider(AuthContext, auth);
 
   return (
     <>
       <HeaderSection />
 
-      <main class="pt-[52px]">
+      <main
+        class={{
+          "pt-[52px]": !["/login/", "/register/", "/sign-out/"].includes(
+            location.url.pathname,
+          ),
+        }}
+      >
         <Slot />
       </main>
     </>

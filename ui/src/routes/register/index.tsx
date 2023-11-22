@@ -106,7 +106,10 @@ export default component$(() => {
               <p class="rounded-lg bg-green-50 p-4 text-green-600">
                 Your account <strong>{registerForm.response.data}</strong> is
                 created successfully.{" "}
-                <Link class="text-primary-600 hover:underline" href="/login">
+                <Link
+                  class="inline-flex items-center text-primary-600 hover:underline"
+                  href="/login"
+                >
                   <svg
                     class="mr-2 h-4 w-4 text-gray-800 dark:text-white"
                     aria-hidden="true"
