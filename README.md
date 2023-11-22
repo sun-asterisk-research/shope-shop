@@ -1,8 +1,8 @@
 # shope-shop
 
-Simple shop is used for Sun* Atlas's training purposes.
+Simple shop is used for Sun\* Atlas's training purposes.
 
-![image](https://github.com/sun-asterisk-research/shope-shop/assets/13513658/8fffdbfd-4547-4edd-bf28-e5bd0051919e)
+![image](./thumbnail.jpeg)
 
 ## Development
 
