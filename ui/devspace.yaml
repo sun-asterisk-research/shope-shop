@@ -19,7 +19,6 @@ images:
   ui:
     image: ghcr.io/sun-asterisk-research/shope-shop/ui
     buildArgs:
-      PUBLIC_API_URL: "https://shopeapi.sun-asterisk.ai"
       PUBLIC_USERNAME_DEFAULT: "customer1935"
 
 deployments:

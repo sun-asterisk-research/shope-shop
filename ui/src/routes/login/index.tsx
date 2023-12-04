@@ -22,8 +22,14 @@ export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
 
 export const useFormAction = formAction$<LoginForm>(
   async (values, requestEvent) => {
+    const publicUrl = requestEvent.url.origin.replace(
+      /^(http[s]?:\/\/[a-z]+)/,
+      "$1api",
+    );
     const baseUrl =
-      requestEvent.env.get("API_URL") || import.meta.env.PUBLIC_API_URL;
+      requestEvent.env.get("API_URL") ||
+      import.meta.env.PUBLIC_API_URL ||
+      publicUrl;
 
     const res = await fetch(`${baseUrl}/auth/login`, {
       method: "POST",
