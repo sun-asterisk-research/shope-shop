@@ -21,13 +21,11 @@ export const updateItem = server$(async function (
   productId: string,
   method: "DELETE" | "POST",
 ) {
-  const res = await fetch(`${this.env.get("API_URL")}/cart/item`, {
+  const res = await fetch(`${this.env.get("API_URL")}/cart/item/${productId}`, {
     method,
     headers: {
       Authorization: `Bearer ${this.cookie.get("shope_auth")?.value}`,
-      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ productId }),
   });
 
   return res.json();

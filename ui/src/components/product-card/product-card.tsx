@@ -8,14 +8,12 @@ interface ProductCardProps {
 }
 
 export const addToCart = server$(async function (productId: string) {
-  const res = await fetch(`${this.env.get("API_URL")}/cart/item`, {
+  const res = await fetch(`${this.env.get("API_URL")}/cart/item/${productId}`, {
     method: "POST",
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${this.cookie.get("shope_auth")?.value}`,
     },
-    body: JSON.stringify({ productId }),
   }).then((res) => res.json());
 
   return res;
@@ -51,7 +49,7 @@ export default component$<ProductCardProps>(({ product, class: classes }) => {
             ${product.price}
           </span>
           <svg
-            class="hover:text-primary-500 h-5 w-5 cursor-pointer align-middle text-gray-800 dark:text-white"
+            class="h-5 w-5 cursor-pointer align-middle text-gray-800 hover:text-primary-500 dark:text-white"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
