@@ -1,10 +1,7 @@
 import S from "fluent-json-schema";
 
 export const addItemSchema = {
-  body: S.object().prop(
-    "productId",
-    S.string().required().pattern("^[a-z0-9]+$")
-  ),
+  params: S.object().prop("productId", S.string().required()),
 };
 
 export const removeItemSchema = addItemSchema;

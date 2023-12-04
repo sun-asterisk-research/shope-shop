@@ -4,7 +4,7 @@ import { User } from "~/models/user";
 import { clamp } from "lodash";
 
 type AddItemRequest = FastifyRequest<{
-  Body: {
+  Params: {
     productId: string;
   };
 }>;
@@ -32,7 +32,7 @@ export const listItems = async (req: FastifyRequest, res: FastifyReply) => {
 
 export const addItem = async (req: AddItemRequest, res: FastifyReply) => {
   const authUser = await User.findById(req.user.sub);
-  const product = await Product.findById(req.body.productId);
+  const product = await Product.findById(req.params.productId);
 
   if (!product || !authUser) {
     res.status(400).send({
@@ -66,7 +66,7 @@ export const addItem = async (req: AddItemRequest, res: FastifyReply) => {
 
 export const removeItem = async (req: RemoveItemRequest, res: FastifyReply) => {
   const authUser = await User.findById(req.user.sub);
-  const product = await Product.findById(req.body.productId);
+  const product = await Product.findById(req.params.productId);
 
   if (!product || !authUser || !authUser.cart?.items) {
     res.status(400).send({
@@ -90,7 +90,7 @@ export const removeItem = async (req: RemoveItemRequest, res: FastifyReply) => {
       authUser.cart.items[idx].quantity = newQuantity;
     } else {
       authUser.cart.items = authUser.cart.items.filter(
-        (item) => item.product.toString() !== req.body.productId
+        (item) => item.product.toString() !== req.params.productId
       );
     }
     authUser.save();
@@ -101,7 +101,7 @@ export const removeItem = async (req: RemoveItemRequest, res: FastifyReply) => {
 
 export const deleteItem = async (req: RemoveItemRequest, res: FastifyReply) => {
   const authUser = await User.findById(req.user.sub);
-  const product = await Product.findById(req.body.productId);
+  const product = await Product.findById(req.params.productId);
 
   if (!product || !authUser || !authUser.cart?.items) {
     res.status(400).send({
@@ -112,7 +112,7 @@ export const deleteItem = async (req: RemoveItemRequest, res: FastifyReply) => {
   }
 
   authUser.cart.items = authUser.cart.items.filter(
-    (item) => item.product.toString() !== req.body.productId
+    (item) => item.product.toString() !== req.params.productId
   );
   authUser.save();
 

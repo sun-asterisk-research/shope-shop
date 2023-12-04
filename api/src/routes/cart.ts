@@ -20,8 +20,12 @@ export default async (fastify: FastifyInstance) => {
       group.get("/", listItems);
       group.delete("/", resetCart);
 
-      group.post("/item", { schema: addItemSchema }, addItem);
-      group.delete("/item", { schema: removeItemSchema }, removeItem);
+      group.post("/item/:productId", { schema: addItemSchema }, addItem);
+      group.delete(
+        "/item/:productId",
+        { schema: removeItemSchema },
+        removeItem
+      );
       group.put("/item/:productId", { schema: updateItemSchema }, updateItem);
     },
     { prefix: "/cart" }

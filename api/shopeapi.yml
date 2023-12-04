@@ -1,11 +1,11 @@
 openapi: "3.0.2"
 info:
   title: Shope API - OpenAPI v3.0.2
-  version: "1.0.0"
+  version: "1.1.0"
   description: |
     **Shope** is a simple shop that is used for Sun* Atlas - Performance Testing training purposes. You can browse products, add them to your cart and buy them.
 
-    Visit the web ui:
+    You can visit the demo website by clicking on the link below:
     - Team 1: [https://shope1.sun-asterisk.vn](https://shope1.sun-asterisk.vn)
     - Team 2: [https://shope2.sun-asterisk.vn](https://shope2.sun-asterisk.vn)
     - Team 3: [https://shope3.sun-asterisk.vn](https://shope3.sun-asterisk.vn)
@@ -28,7 +28,6 @@ tags:
     description: Everything related to the carts.
   - name: orders
     description: Everything related to the orders.
-
 paths:
   /auth/login:
     post:
@@ -158,12 +157,7 @@ paths:
       tags:
         - products
       parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: string
-            example: 655d7f2c4e7abfc3da0ea22f
+        - $ref: "#/components/parameters/ProductId"
       responses:
         "200":
           description: Get product successfully.
@@ -230,31 +224,19 @@ paths:
           $ref: "#/components/responses/401Unauthorized"
         "500":
           $ref: "#/components/responses/500InternalServer"
-  /cart/item:
+  /cart/item/{productId}:
     post:
-      summary: "Add a product to your cart"
-      description: "Add a product to your cart."
+      summary: "Add a product into your cart"
+      description: "Add a product into your cart."
       tags:
         - carts
       security:
         - bearerAuth: []
-      requestBody:
-        $ref: "#/components/requestBodies/UpdateCartPayload"
+      parameters:
+        - $ref: "#/components/parameters/ProductId"
       responses:
         "200":
-          description: Add 1 product to cart successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  count:
-                    type: number
-                    example: 1
-                    description: Number of total items in your cart. Grouped by product.
+          $ref: "#/components/responses/200UpdateCartOK"
         "400":
           $ref: "#/components/responses/400BadRequest"
         "401":
@@ -262,46 +244,24 @@ paths:
         "500":
           $ref: "#/components/responses/500InternalServer"
     delete:
-      summary: "Remove a product"
+      summary: "Remove a product from your cart"
       description: |
-        Remove a product from your cart. Example:
-        - **Before:** Product A, quantity = 2.
-        - **After:** Product A, quantity = 1.
+        Remove a product from your cart. Before: Product A, quantity = 2. After:** Product A, quantity = 1.
       tags:
         - carts
       security:
         - bearerAuth: []
       parameters:
-        - name: Content-Type
-          in: header
-          required: true
-          schema:
-            type: string
-            example: application/json
-      requestBody:
-        $ref: "#/components/requestBodies/UpdateCartPayload"
+        - $ref: "#/components/parameters/ProductId"
       responses:
         "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  count:
-                    type: number
-                    example: 1
-                    description: Number of total items in your cart. Grouped by product.
+          $ref: "#/components/responses/200UpdateCartOK"
         "400":
           $ref: "#/components/responses/400BadRequest"
         "401":
           $ref: "#/components/responses/401Unauthorized"
         "500":
           $ref: "#/components/responses/500InternalServer"
-
   /cart/checkout:
     get:
       summary: "Get checkout information"
@@ -376,7 +336,6 @@ paths:
           $ref: "#/components/responses/401Unauthorized"
         "500":
           $ref: "#/components/responses/500InternalServer"
-
 components:
   securitySchemes:
     bearerAuth:
@@ -421,19 +380,30 @@ components:
           type: string
           example: 0
           description: Data version
-
-  requestBodies:
-    UpdateCartPayload:
-      description: "Request payload data that needs for updating cart."
+  parameters:
+    ProductId:
+      description: "Product ID in the path."
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 655d7f2c4e7abfc3da0ea22f
+  responses:
+    200UpdateCartOK:
+      description: Update cart successfully.
       content:
         application/json:
           schema:
             type: object
             properties:
-              productId:
-                type: string
-                example: 655d7f2c4e7abfc3da0ea22f
-  responses:
+              success:
+                type: boolean
+                example: true
+              count:
+                type: number
+                example: 1
+                description: Count your cart by product ID.
     404NotFound:
       description: The specified resource was not found.
       content:
@@ -465,7 +435,7 @@ components:
                 example: Bad Request
               message:
                 type: string
-                example: Invalid username or password
+                example: Your request is invalid
     401Unauthorized:
       description: "Can not authenticate your request."
       content:
@@ -495,12 +465,9 @@ components:
               statusCode:
                 type: integer
                 example: 500
-              code:
-                type: string
-                example: FST_JWT_NO_AUTHORIZATION_IN_COOKIE
               error:
                 type: string
-                example: Unauthorized
+                example: Internal Server Error
               message:
                 type: string
-                example: No Authorization was found in request.cookies
+                example: Something went wrong
