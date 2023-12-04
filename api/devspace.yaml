@@ -26,6 +26,7 @@ deployments:
         name: component-chart
         repo: https://charts.devspace.sh
       values:
+        replicas: 3
         containers:
           - image: ghcr.io/sun-asterisk-research/shope-shop/api
             env:
@@ -76,6 +77,9 @@ dev:
 profiles:
   - name: production
     patches:
+      - op: replace
+        path: deployments.api.helm.values.replicas
+        value: 3
       - op: replace
         path: deployments.api.helm.values.ingress
         value:
