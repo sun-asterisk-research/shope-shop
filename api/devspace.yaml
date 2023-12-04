@@ -34,6 +34,13 @@ deployments:
                 value: mongodb://shope:secret@mongodb:27017/shope
               - name: JWT_SECRET
                 value: secret
+            resources:
+              requests:
+                cpu: 2m
+                memory: 120Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
         service:
           ports:
             - port: 3000
@@ -53,6 +60,13 @@ deployments:
           databases: ["shope"]
           usernames: ["shope"]
           passwords: ["secret"]
+        resources:
+          requests:
+            cpu: 150m
+            memory: 150Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
 
 dev:
   api:

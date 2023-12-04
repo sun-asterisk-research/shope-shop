@@ -31,6 +31,13 @@ deployments:
       values:
         containers:
           - image: ghcr.io/sun-asterisk-research/shope-shop/ui
+            resources:
+              requests:
+                cpu: 1m
+                memory: 60Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
         service:
           ports:
             - port: 3000
