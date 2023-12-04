@@ -216,8 +216,11 @@ paths:
                     items:
                       type: object
                       properties:
-                        name:
-                          type: string
+                        product:
+                          $ref: "#/components/schemas/Product"
+                        quantity:
+                          type: integer
+                          example: 2
         "400":
           $ref: "#/components/responses/400BadRequest"
         "401":
@@ -330,6 +333,75 @@ paths:
                   orderId:
                     type: string
                     example: 656dcf5057bc53f90ed744fc
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /orders:
+    get:
+      summary: "Get order history"
+      description: Return list of recent orders.
+      tags:
+        - orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cursor
+          description: The cursor is used to query data for the next page
+          in: query
+          schema:
+            type: string
+            example: 656dcf5057bc53f90ed744fc
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nextCursor:
+                    type: string
+                    example: 656dcf5057bc53f90ed744fc
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          description: Order ID
+                          type: string
+                          example: 2596dcf5057bc53f90ed744fc
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                                example: 2596dcf5057bc53f90ed744fc
+                              product:
+                                $ref: "#/components/schemas/Product"
+                              quantity:
+                                type: integer
+                                example: 1
+                              amount:
+                                type: number
+                                example: 681.00
+                        total:
+                          type: number
+                          example: 681.00
+                        address:
+                          type: string
+                          example: Hanoi, Vietnam
+                        createdAt:
+                          type: string
+                          example: 2023-11-22T04:10:20.325Z
+                        updatedAt:
+                          type: string
+                          example: 2023-11-22T04:10:20.325Z
         "400":
           $ref: "#/components/responses/400BadRequest"
         "401":
