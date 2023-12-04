@@ -1,0 +1,506 @@
+openapi: "3.0.2"
+info:
+  title: Shope API - OpenAPI v3.0.2
+  version: "1.0.0"
+  description: |
+    **Shope** is a simple shop that is used for Sun* Atlas - Performance Testing training purposes. You can browse products, add them to your cart and buy them.
+
+    Visit the web ui:
+    - Team 1: [https://shope1.sun-asterisk.vn](https://shope1.sun-asterisk.vn)
+    - Team 2: [https://shope2.sun-asterisk.vn](https://shope2.sun-asterisk.vn)
+    - Team 3: [https://shope3.sun-asterisk.vn](https://shope3.sun-asterisk.vn)
+    - Team 4: [https://shope4.sun-asterisk.vn](https://shope4.sun-asterisk.vn)
+  contact:
+    email: nguyen.huu.kim@sun-asterisk.com
+servers:
+  - url: https://shopeapi.sun-asterisk.ai
+  - url: https://shopeapi1.sun-asterisk.vn
+  - url: https://shopeapi2.sun-asterisk.vn
+  - url: https://shopeapi3.sun-asterisk.vn
+  - url: https://shopeapi4.sun-asterisk.vn
+  - url: http://localhost:3000
+tags:
+  - name: accounts
+    description: Everthing related to the accounts (login, register...).
+  - name: products
+    description: Everything related to the products.
+  - name: carts
+    description: Everything related to the carts.
+  - name: orders
+    description: Everything related to the orders.
+
+paths:
+  /auth/login:
+    post:
+      summary: Sign in by username and password
+      tags:
+        - accounts
+      description: Get access token (JWT token) by username and password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - "username"
+                - "password"
+              properties:
+                username:
+                  type: string
+                  example: customer1935
+                password:
+                  type: string
+                  example: 12345678
+      responses:
+        "200":
+          description: Login successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTVkODIyZGE5YmQ1ZmUwODA5ODViYWUiLCJwcmVmZXJlZF91c2VybmFtZSI6ImN1c3RvbWVyMTkzNSIsInBpY3R1cmUiOiJodHRwczovL2ltYWdlcy52aWJsby5hc2lhL2F2YXRhci9hNjQ3MjMwZC02NzE4LTQyNDktYjdjYS0wOWM5NjBiMmU5N2MucG5nIiwiYXVkIjoic2hvcGUiLCJleHAiOjE3MDE2ODc0MTc4MjgsImlhdCI6MTcwMTY4MDIxNzgyOH0.fCaJ38l98nq2bKfdg7lvQDuri66fckdMJEl5g-1jJXI
+                  expiredAt:
+                    type: number
+                    example: 1701687417842
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /auth/register:
+    post:
+      summary: "Register a new account"
+      description: "Register a new account."
+      tags:
+        - accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - "username"
+                - "password"
+                - "confirmPassword"
+      responses:
+        "200":
+          description: Get user profile successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  username:
+                    type: string
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /auth/user:
+    get:
+      summary: "Get user profile information"
+      description: "Get user profile information."
+      tags:
+        - accounts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Get user profile successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /products/latest:
+    get:
+      summary: "Get products"
+      description: "Get list of the latest products."
+      tags:
+        - products
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nextCursor:
+                    type: string
+                    example: 655d7f2c4e7abfc3da0ea224
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /products/{productId}:
+    get:
+      summary: "Get product details"
+      description: "Get product details."
+      tags:
+        - products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 655d7f2c4e7abfc3da0ea22f
+      responses:
+        "200":
+          description: Get product successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /cart:
+    delete:
+      summary: "Reset your cart"
+      description: "Make make your cart empty."
+      tags:
+        - carts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Reset cart successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+    get:
+      summary: "Get cart items"
+      description: "Get cart items."
+      tags:
+        - carts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+  /cart/item:
+    post:
+      summary: "Add a product to your cart"
+      description: "Add a product to your cart."
+      tags:
+        - carts
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateCartPayload"
+      responses:
+        "200":
+          description: Add 1 product to cart successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: number
+                    example: 1
+                    description: Number of total items in your cart. Grouped by product.
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+    delete:
+      summary: "Remove a product"
+      description: |
+        Remove a product from your cart. Example:
+        - **Before:** Product A, quantity = 2.
+        - **After:** Product A, quantity = 1.
+      tags:
+        - carts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            type: string
+            example: application/json
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateCartPayload"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: number
+                    example: 1
+                    description: Number of total items in your cart. Grouped by product.
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+
+  /cart/checkout:
+    get:
+      summary: "Get checkout information"
+      description: Get checkout information.
+      tags:
+        - orders
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                    example: 2043.00
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          $ref: "#/components/schemas/Product"
+                        quantity:
+                          type: integer
+                          example: 3
+                        amount:
+                          type: number
+                          example: 2043.00
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+    post:
+      summary: "Submit a new order"
+      description: Submit a new order.
+      tags:
+        - orders
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: Hanoi, Vietnam
+      responses:
+        "200":
+          description: Create order successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  orderId:
+                    type: string
+                    example: 656dcf5057bc53f90ed744fc
+        "400":
+          $ref: "#/components/responses/400BadRequest"
+        "401":
+          $ref: "#/components/responses/401Unauthorized"
+        "500":
+          $ref: "#/components/responses/500InternalServer"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: customer1935
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 655d7f2c4e7abfc3da0ea22f
+        title:
+          type: string
+          example: Luxurious Granite Car
+        description:
+          type: string
+          example: The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Goodness of 100% Natural Ingredients
+        imageUrl:
+          type: string
+          example: https://loremflickr.com/170/170?lock=6447847631224832
+        price:
+          type: number
+          example: 681
+        discount:
+          type: number
+          example: 1
+        createdAt:
+          type: string
+          example: 2023-11-22T04:10:20.325Z
+        updatedAt:
+          type: string
+          example: 2023-11-22T04:10:20.325Z
+        __v:
+          type: string
+          example: 0
+          description: Data version
+
+  requestBodies:
+    UpdateCartPayload:
+      description: "Request payload data that needs for updating cart."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                example: 655d7f2c4e7abfc3da0ea22f
+  responses:
+    404NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: Route not found
+    400BadRequest:
+      description: "The request is invalid. For example: invalid bearer token format, invalid payload data..."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Invalid username or password
+    401Unauthorized:
+      description: "Can not authenticate your request."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 401
+              code:
+                type: string
+                example: FST_JWT_NO_AUTHORIZATION_IN_COOKIE
+              error:
+                type: string
+                example: Unauthorized
+              message:
+                type: string
+                example: No Authorization was found in request.cookies
+    500InternalServer:
+      description: "Something went wrong due to the server."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 500
+              code:
+                type: string
+                example: FST_JWT_NO_AUTHORIZATION_IN_COOKIE
+              error:
+                type: string
+                example: Unauthorized
+              message:
+                type: string
+                example: No Authorization was found in request.cookies
