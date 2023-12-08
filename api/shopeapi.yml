@@ -13,7 +13,6 @@ info:
   contact:
     email: nguyen.huu.kim@sun-asterisk.com
 servers:
-  - url: https://shopeapi.sun-asterisk.ai
   - url: https://shopeapi1.sun-asterisk.vn
   - url: https://shopeapi2.sun-asterisk.vn
   - url: https://shopeapi3.sun-asterisk.vn
