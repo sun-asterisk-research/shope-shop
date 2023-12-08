@@ -52,6 +52,11 @@ const jwtPlugin = fp(async (fastify: FastifyInstance) => {
     "authenticate",
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
+        const tokenFromHeader = request.headers.authorization;
+        if (tokenFromHeader && tokenFromHeader.match(/^Basic\s/)) {
+          delete request.headers.authorization;
+        }
+
         await request.jwtVerify();
       } catch (err) {
         reply.send(err);
