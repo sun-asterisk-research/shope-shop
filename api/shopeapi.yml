@@ -109,6 +109,8 @@ paths:
       tags:
         - accounts
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       responses:
         "200":
@@ -178,6 +180,8 @@ paths:
       tags:
         - carts
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       responses:
         "200":
@@ -202,6 +206,8 @@ paths:
       tags:
         - carts
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       responses:
         "200":
@@ -234,6 +240,8 @@ paths:
       tags:
         - carts
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
@@ -253,6 +261,8 @@ paths:
       tags:
         - carts
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
@@ -272,6 +282,8 @@ paths:
       tags:
         - orders
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       responses:
         "200":
@@ -309,6 +321,8 @@ paths:
       tags:
         - orders
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       requestBody:
         content:
@@ -346,6 +360,8 @@ paths:
       tags:
         - orders
       security:
+        - basicAuth: []
+        - cookieAuth: []
         - bearerAuth: []
       parameters:
         - name: cursor
@@ -410,6 +426,13 @@ paths:
           $ref: "#/components/responses/500InternalServer"
 components:
   securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: shope_auth
     bearerAuth:
       type: http
       scheme: bearer
