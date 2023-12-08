@@ -85,6 +85,16 @@ paths:
                 - "username"
                 - "password"
                 - "confirmPassword"
+              properties:
+                username:
+                  type: string
+                  example: customer1935
+                password:
+                  type: string
+                  example: 12345678
+                confirmPassword:
+                  type: string
+                  example: 12345678
       responses:
         "200":
           description: Get user profile successfully.
@@ -108,10 +118,6 @@ paths:
       description: "Get user profile information."
       tags:
         - accounts
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       responses:
         "200":
           description: Get user profile successfully.
@@ -179,10 +185,6 @@ paths:
       description: "Make make your cart empty."
       tags:
         - carts
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       responses:
         "200":
           description: Reset cart successfully.
@@ -205,10 +207,6 @@ paths:
       description: "Get cart items."
       tags:
         - carts
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       responses:
         "200":
           description: OK
@@ -239,10 +237,6 @@ paths:
       description: "Add a product into your cart."
       tags:
         - carts
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
       responses:
@@ -260,10 +254,6 @@ paths:
         Remove a product from your cart. Before: Product A, quantity = 2. After:** Product A, quantity = 1.
       tags:
         - carts
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
       responses:
@@ -281,10 +271,6 @@ paths:
       description: Get checkout information.
       tags:
         - orders
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       responses:
         "200":
           description: OK
@@ -320,10 +306,6 @@ paths:
       description: Submit a new order.
       tags:
         - orders
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -359,10 +341,6 @@ paths:
       description: Return list of recent orders.
       tags:
         - orders
-      security:
-        - basicAuth: []
-        - cookieAuth: []
-        - bearerAuth: []
       parameters:
         - name: cursor
           description: The cursor is used to query data for the next page
@@ -566,3 +544,8 @@ components:
               message:
                 type: string
                 example: Something went wrong
+
+security:
+  - basicAuth: []
+  - cookieAuth: []
+  - bearerAuth: []
