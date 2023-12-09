@@ -72,7 +72,11 @@ dev:
   api:
     labelSelector:
       app.kubernetes.io/component: api
-    devImage: oven/bun:1
+    # [Bug] https://github.com/oven-sh/bun/issues/7250
+    # For an unknown reason, with bun version,
+    # http module seem to keep passing method as uppercase1.0.10,
+    # but not options which become lowercase, and so all OPTIONS routes are broken.
+    devImage: oven/bun:1.0.9
     command: ["./devspace_start.sh"]
     env:
       - name: NODE_ENV

@@ -17,7 +17,18 @@ const fastify = Fastify({
   },
 });
 
-fastify.register(cors);
+fastify.register(cors, {
+  origin: config.isDev || [
+    "https://sun-asterisk-research.github.io",
+    "https://shope1.sun-asterisk.vn",
+    "https://shope2.sun-asterisk.vn",
+    "https://shope3.sun-asterisk.vn",
+    "https://shope4.sun-asterisk.vn",
+  ],
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+  credentials: true,
+});
 
 fastify.register(jwtPlugin);
 fastify.register(healthcheck);
