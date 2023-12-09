@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Shope API - OpenAPI v3.0.2
-  version: "1.1.0"
+  version: "1.1.1"
   description: |
     **Shope** is a simple shop that is used for Sun* Atlas - Performance Testing training purposes. You can browse products, add them to your cart and buy them.
 
@@ -13,7 +13,6 @@ info:
   contact:
     email: nguyen.huu.kim@sun-asterisk.com
 servers:
-  - url: https://shopeapi.sun-asterisk.ai
   - url: https://shopeapi1.sun-asterisk.vn
   - url: https://shopeapi2.sun-asterisk.vn
   - url: https://shopeapi3.sun-asterisk.vn
