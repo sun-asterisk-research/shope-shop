@@ -10,6 +10,15 @@ info:
     - Team 2: [https://shope2.sun-asterisk.vn](https://shope2.sun-asterisk.vn)
     - Team 3: [https://shope3.sun-asterisk.vn](https://shope3.sun-asterisk.vn)
     - Team 4: [https://shope4.sun-asterisk.vn](https://shope4.sun-asterisk.vn)
+
+    **Notes for SwaggerUI**:
+    - Cookie authentication is currently not supported for "try it out" requests due to browser security restrictions. See [this issue](https://github.com/swagger-api/swagger-js/issues/1163) for more information.
+    - Basic authentication is not included in the OPTIONS requests. Therefore, all preflight requests from SwaggerUI will be unauthorized and you will get CORS error.
+    - If you want to use "try it out" feature with basic authentication and cookie authentication, you can add the requests headers manually using the browser extension [simple-modify-headers](https://chromewebstore.google.com/detail/simple-modify-headers/gjgiipmpldkpbdfjkgofildhapegmmic):
+      1. URL pattern: `https://shopeapi1.sun-asterisk.vn/*`
+      2. Add - Authorization - Basic <base64_token>
+      3. Add - Cookie - shope_auth=<access_token>
+      4. Click `Start` button
   contact:
     email: nguyen.huu.kim@sun-asterisk.com
 servers:
@@ -123,7 +132,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  authUser:
+                    $ref: "#/components/schemas/User"
+                  cartItems:
+                    type: number
+                    example: 3
         "400":
           $ref: "#/components/responses/400BadRequest"
         "401":
@@ -418,9 +433,15 @@ components:
     User:
       type: object
       properties:
+        id:
+          type: string
+          example: 655d822da9bd5fe080985bae
         username:
           type: string
           example: customer1935
+        avatarUrl:
+          type: string
+          example: null
     Product:
       type: object
       properties:
