@@ -57,6 +57,8 @@ deployments:
           repository: bitnami/mongodb
           tag: "7.0.2-debian-11-r0"
         auth:
+          rootUser: root
+          rootPassword: secret
           databases: ["shope"]
           usernames: ["shope"]
           passwords: ["secret"]

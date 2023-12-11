@@ -35,3 +35,21 @@ devspace deploy
 ```bash
 devspace deploy -p production
 ```
+
+- Grant roles on MongoDB:
+
+```bash
+mongosh admin --username root -p
+
+use admin
+db.createUser(
+  {
+    user: "shope",
+    pwd: "secret",
+    roles: [
+        { role: "clusterMonitor", db: "admin" },
+        { role: "read", db: "local" }
+    ]
+  }
+)
+```
