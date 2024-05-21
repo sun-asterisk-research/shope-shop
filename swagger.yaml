@@ -6,10 +6,9 @@ info:
     **Shope** is a simple shop that is used for Sun* Atlas - Performance Testing training purposes. You can browse products, add them to your cart and buy them.
 
     You can visit the demo website by clicking on the link below:
-    - Team 1: [https://shope1.sun-asterisk.vn](https://shope1.sun-asterisk.vn)
-    - Team 2: [https://shope2.sun-asterisk.vn](https://shope2.sun-asterisk.vn)
-    - Team 3: [https://shope3.sun-asterisk.vn](https://shope3.sun-asterisk.vn)
-    - Team 4: [https://shope4.sun-asterisk.vn](https://shope4.sun-asterisk.vn)
+    - Web: [https://shope.sun-asterisk.vn](https://shope.sun-asterisk.vn)
+    - API: [https://shopeapi.sun-asterisk.vn](https://shopeapi.sun-asterisk.vn)
+    - Grafana dashboard: [https://dash.sun-asterisk.vn](https://dash.sun-asterisk.vn)
 
     **Notes for SwaggerUI**:
     - Cookie authentication is currently not supported for "try it out" requests due to browser security restrictions. See [this issue](https://github.com/swagger-api/swagger-js/issues/1163) for more information.
@@ -22,10 +21,7 @@ info:
   contact:
     email: nguyen.huu.kim@sun-asterisk.com
 servers:
-  - url: https://shopeapi1.sun-asterisk.vn
-  - url: https://shopeapi2.sun-asterisk.vn
-  - url: https://shopeapi3.sun-asterisk.vn
-  - url: https://shopeapi4.sun-asterisk.vn
+  - url: https://shopeapi.sun-asterisk.vn
   - url: http://localhost:3000
 tags:
   - name: accounts
