@@ -8,13 +8,14 @@ info:
     You can visit the demo website by clicking on the link below:
     - Web: [https://shope.sun-asterisk.vn](https://shope.sun-asterisk.vn)
     - API: [https://shopeapi.sun-asterisk.vn](https://shopeapi.sun-asterisk.vn)
+    - Source code: [https://github.com/sun-asterisk-rearch/shope-shop](https://github.com/sun-asterisk-rearch/shope-shop)
     - Grafana dashboard: [https://dash.sun-asterisk.vn](https://dash.sun-asterisk.vn)
 
     **Notes for SwaggerUI**:
     - Cookie authentication is currently not supported for "try it out" requests due to browser security restrictions. See [this issue](https://github.com/swagger-api/swagger-js/issues/1163) for more information.
     - Basic authentication is not included in the OPTIONS requests. Therefore, all preflight requests from SwaggerUI will be unauthorized and you will get CORS error.
     - If you want to use "try it out" feature with basic authentication and cookie authentication, you can add the requests headers manually using the browser extension [simple-modify-headers](https://chromewebstore.google.com/detail/simple-modify-headers/gjgiipmpldkpbdfjkgofildhapegmmic):
-      1. URL pattern: `https://shopeapi1.sun-asterisk.vn/*`
+      1. URL pattern: `https://shopeapi.sun-asterisk.vn/*`
       2. Add - Authorization - Basic <base64_token>
       3. Add - Cookie - shope_auth=<access_token>
       4. Click `Start` button
