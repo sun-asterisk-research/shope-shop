@@ -21,6 +21,10 @@ images:
     buildArgs:
       PUBLIC_USERNAME_DEFAULT: "customer1935"
 
+
+localRegistry:
+  enabled: false
+
 deployments:
   ui:
     helm:

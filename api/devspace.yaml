@@ -19,6 +19,9 @@ images:
   api:
     image: ghcr.io/sun-asterisk-research/shope-shop/api
 
+localRegistry:
+  enabled: false
+
 deployments:
   api:
     helm:
