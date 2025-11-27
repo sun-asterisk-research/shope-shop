@@ -6,6 +6,18 @@ on:
       - main
       - master
   pull_request:
+  workflow_dispatch:
+    inputs:
+      api:
+        description: "Build API"
+        required: true
+        default: true
+        type: boolean
+      ui:
+        description: "Build UI"
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   changes:
@@ -26,7 +38,7 @@ jobs:
 
   build-api:
     needs: changes
-    if: ${{ needs.changes.outputs.api == 'true' }}
+    if: ${{ needs.changes.outputs.api == 'true' || inputs.api == true }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -55,7 +67,7 @@ jobs:
 
   build-ui:
     needs: changes
-    if: ${{ needs.changes.outputs.ui == 'true' }}
+    if: ${{ needs.changes.outputs.ui == 'true' || inputs.ui == true }}
     runs-on: ubuntu-latest
     defaults:
       run:
