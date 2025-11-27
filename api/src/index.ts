@@ -1,13 +1,13 @@
-import Fastify from "fastify";
 import cors from "@fastify/cors";
+import Fastify from "fastify";
 import * as mongoose from "mongoose";
 import { config } from "./config";
 import jwtPlugin from "./plugins/jwt";
 import authRoutes from "./routes/auth";
-import productRoutes from "./routes/product";
 import cartRoutes from "./routes/cart";
-import healthcheck from "./routes/healthcheck";
 import checkoutRoutes from "./routes/checkout";
+import healthcheck from "./routes/healthcheck";
+import productRoutes from "./routes/product";
 
 await mongoose.connect(config.DATABASE_URL);
 
@@ -20,13 +20,13 @@ const fastify = Fastify({
 fastify.register(cors, {
   origin: config.isDev || [
     "https://sun-asterisk-research.github.io",
+    "https://shope.sun-asterisk.vn",
     "https://shope1.sun-asterisk.vn",
     "https://shope2.sun-asterisk.vn",
     "https://shope3.sun-asterisk.vn",
     "https://shope4.sun-asterisk.vn",
   ],
-  methods: "GET,POST,PUT,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
   credentials: true,
 });
 

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { clamp } from "lodash";
 import { Product } from "~/models/product";
 import { User } from "~/models/user";
-import { clamp } from "lodash";
 
 type AddItemRequest = FastifyRequest<{
   Params: {
@@ -25,7 +25,7 @@ export const listItems = async (req: FastifyRequest, res: FastifyReply) => {
 
   await authUser?.populate("cart.items.product");
 
-  const items = authUser?.cart?.items || [];
+  const items = authUser?.cart?.items.filter((item) => item.product) || [];
 
   res.send({ items });
 };
@@ -47,7 +47,7 @@ export const addItem = async (req: AddItemRequest, res: FastifyReply) => {
   }
 
   const idx = authUser.cart.items.findIndex(
-    (p) => p.product.toString() === product._id.toString()
+    (p) => p.product && p.product.toString() === product._id.toString()
   );
 
   if (idx < 0) {
@@ -77,7 +77,7 @@ export const removeItem = async (req: RemoveItemRequest, res: FastifyReply) => {
   }
 
   const idx = authUser.cart.items.findIndex(
-    (p) => p.product.toString() === product._id.toString()
+    (p) => p.product && p.product.toString() === product._id.toString()
   );
 
   if (idx >= 0) {
@@ -90,7 +90,8 @@ export const removeItem = async (req: RemoveItemRequest, res: FastifyReply) => {
       authUser.cart.items[idx].quantity = newQuantity;
     } else {
       authUser.cart.items = authUser.cart.items.filter(
-        (item) => item.product.toString() !== req.params.productId
+        (item) =>
+          item.product && item.product.toString() !== req.params.productId
       );
     }
     authUser.save();
@@ -112,7 +113,7 @@ export const deleteItem = async (req: RemoveItemRequest, res: FastifyReply) => {
   }
 
   authUser.cart.items = authUser.cart.items.filter(
-    (item) => item.product.toString() !== req.params.productId
+    (item) => item.product && item.product.toString() !== req.params.productId
   );
   authUser.save();
 
@@ -132,7 +133,7 @@ export const updateItem = async (req: UpdateItemRequest, res: FastifyReply) => {
   }
 
   const idx = authUser.cart.items.findIndex(
-    (p) => p.product.toString() === req.params.productId
+    (p) => p.product && p.product.toString() === req.params.productId
   );
   if (idx >= 0) {
     authUser.cart.items[idx].quantity = clamp(
